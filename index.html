@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap By SKILLHUB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+            width: 350px;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .box {
+            border: 2px solid;
+            height: 100px;
+            width: 100px;
+            transition: 0.3s;
+        }
+
+        .box:hover {
+            transform: scale(0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <div id="output"></div>
+                <table id="stat" class="d-none text-center table table-dark table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th id="p1name" class="table-danger">player 1 name</th>
+                            <th id="p2name" class="table-primary">player2 name</th>
+                            <th class="table-secondary">Draw</th>
+                            <th class="table-warning">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr>
+                            <td id="redCount" class="table-danger">0</td>
+                            <td id="blueCount" class="table-primary">0</td>
+                            <td id="drawCount" class="table-secondary">0</td>
+                            <td id="totalCount" class="table-warning">0</td>
+                        </tr>
+                        <tr class="table-light">
+                            <td colspan="4">
+                                <div class="progress position-relative ">
+                                    <div id="redpro"
+                                        class="progress-bar progress-bar-striped progress-bar-animated  bg-danger">
+                                    </div>
+                                    <div id="bluepro"
+                                        class="progress-bar progress-bar-striped progress-bar-animated  bg-primary">
+                                    </div>
+                                    <div id="drawpro"
+                                        class="progress-bar progress-bar-striped progress-bar-animated  bg-dark">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="card" id="playerCard">
+                  <div class="card-header">Start Game</div>
+                  <div class="card-body">
+<input type="text" id="player1" class="form-control" placeholder="player 1 name"> <br>
+<input type="text" id="player2" class="form-control" placeholder="player 2 name"> <br>
+<button  class="btn btn-primary" onclick="startGame()">Start Game</button>
+                  </div>
+                </div>
+                <div class="card d-none" id="show">
+                    <div class="card-header">Tic Tac Toe</div>
+                    <div class="card-body">
+                        <div class="main">
+                            <div id="box1" onclick="game('box1')" class="box"></div>
+                            <div id="box2" onclick="game('box2')" class="box"></div>
+                            <div id="box3" onclick="game('box3')" class="box"></div>
+                            <div id="box4" onclick="game('box4')" class="box"></div>
+                            <div id="box5" onclick="game('box5')" class="box"></div>
+                            <div id="box6" onclick="game('box6')" class="box"></div>
+                            <div id="box7" onclick="game('box7')" class="box"></div>
+                            <div id="box8" onclick="game('box8')" class="box"></div>
+                            <div id="box9" onclick="game('box9')" class="box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+        let chance = true
+        let redcount=0;
+        let blueCount=0;
+        let matchdrawcount=0;
+        let total
+        let p1
+        let p2
+        function startGame() {
+             p1=document.getElementById('player1')
+             p2=document.getElementById('player2')
+            if (p1.value=="") {
+                p1.classList.add("is-invalid")
+            }
+            if (p2.value=="") {
+                p2.classList.add("is-invalid")
+            }
+            if (p1.value!=""&& p2.value!="") {
+                
+                document.getElementById('stat').classList.remove('d-none')            
+                document.getElementById('show').classList.remove('d-none')
+                document.getElementById('playerCard').classList.add('d-none')
+                document.getElementById("p1name").innerHTML=player1.value
+                document.getElementById("p2name").innerHTML=player2.value
+            }
+            
+        }
+        function game(id) {
+            let box = document.getElementById(id)
+            if (!(box.classList.contains("bg-danger") || box.classList.contains("bg-primary"))) {
+                chance ? box.classList.add("bg-danger")
+                    : box.classList.add("bg-primary")
+                chance = !chance
+                checkWinner()
+            }
+        }
+        function checkWinner() {
+
+            let redbox = []
+            let bluebox = []
+            let fill = []
+            for (let i = 0; i < 9; i++) {
+                redbox.push(document.getElementById(`box${i + 1}`).classList.contains("bg-danger"))
+                bluebox.push(document.getElementById(`box${i + 1}`).classList.contains("bg-primary"))
+                if (document.getElementById(`box${i + 1}`).classList.contains("bg-primary") || document.getElementById(`box${i + 1}`).classList.contains("bg-danger")) {
+                    fill.push("hello")
+                }
+            
+            }
+          
+            // console.log(fill);
+            // console.log(redbox);
+            let winner=false
+            switch (true) {
+                case redbox[0] && redbox[1] && redbox[2]: displayResult('red');break;
+                case redbox[3] && redbox[4] && redbox[5]: displayResult('red');break;
+                case redbox[6] && redbox[7] && redbox[8]: displayResult('red');break;
+                case redbox[0] && redbox[3] && redbox[6]: displayResult('red');break;
+                case redbox[1] && redbox[4] && redbox[7]: displayResult('red');break;
+                case redbox[2] && redbox[5] && redbox[8]: displayResult('red');break;
+                case redbox[0] && redbox[4] && redbox[8]: displayResult('red');break;
+                case redbox[2] && redbox[4] && redbox[6]: displayResult('red');break;
+                case bluebox[0] && bluebox[1] && bluebox[2]: displayResult('blue');break;
+                case bluebox[3] && bluebox[4] && bluebox[5]: displayResult('blue');break;
+                case bluebox[6] && bluebox[7] && bluebox[8]: displayResult('blue');break;
+                case bluebox[0] && bluebox[3] && bluebox[6]: displayResult('blue');break;
+                case bluebox[1] && bluebox[4] && bluebox[7]: displayResult('blue');break;
+                case bluebox[2] && bluebox[5] && bluebox[8]: displayResult('blue');break;
+                case bluebox[0] && bluebox[4] && bluebox[8]: displayResult('blue');break;
+                case bluebox[2] && bluebox[4] && bluebox[6]: displayResult('blue');break;
+
+
+
+                default:(fill.length===9) && displayResult("draw")
+                
+                    break;
+            }
+}
+function resetForm() {
+    for (let i = 0; i <9; i++) {
+        document.getElementById(`box${i+1}`).classList.remove("bg-danger")
+        document.getElementById(`box${i+1}`).classList.remove("bg-primary")
+    }
+    chance=true
+}
+function displayResult(arg) {
+    console.log(player1.value);
+    let classes=""
+    let message=""
+    // handle alert classes wincount increment and message to display-start
+    switch (arg) {
+        case "red":redcount++; classes="alert alert-danger"; message=`${p1.value}is winner`  ;break;
+        case "blue":blueCount++; classes="alert alert-primary"; message=`${p2.value} is winner`;break;
+        case "draw":matchdrawcount++; classes="alert alert-dark"; message="match draw";break; 
+        default:
+            break;
+        }
+        // handle alert classes wincount increment and message to display- end
+console.log(redcount,blueCount,matchdrawcount);
+let total=redcount+blueCount+matchdrawcount
+console.warn(total);
+// dispaly win count
+document.getElementById("redCount").innerHTML=redcount
+document.getElementById("blueCount").innerHTML=`<td class="bg-red">${blueCount}</td>`
+document.getElementById("drawCount").innerHTML=`<td class="bg-red">${matchdrawcount}</td>`
+document.getElementById("totalCount").innerHTML=`<td class="bg-red">${total}</td>`
+// dispaly win count end
+console.log("red",(redcount/total)*100);
+console.log("blue",(blueCount/total)*100);
+console.log("draw",(matchdrawcount/total)*100);
+document.getElementById("redpro").style.width=`${(redcount/total)*100}%`
+document.getElementById("bluepro").style.width=`${(blueCount/total*100)}%`
+document.getElementById("drawpro").style.width=`${(matchdrawcount/total*100)}%`
+  document.getElementById("output").innerHTML =`<div class="${classes}">
+   <h1> ${message}</h1>
+   <hr/>
+   <div class="d-flex gap-4">
+    <div class=spinner-border></div>
+    <p>please wait,restart game.</p>
+    </div>
+    </div>`    
+    document.getElementById("show").classList.add("d-none")
+  resetForm()
+  setTimeout(() => {
+      document.getElementById("output").innerHTML =""    
+      document.getElementById("show").classList.remove("d-none")
+    
+}, 2000);
+}
+            // if (fill.length===9 && !winner) {
+            //     console.log("match draw");
+                
+            // }
+            // let redBosex = [
+
+            //     document.getElementById("box1").classList.contains("bg-danger"),
+            //     document.getElementById("box2").classList.contains("bg-danger"),
+            //     document.getElementById("box3").classList.contains("bg-danger"),
+            //     document.getElementById("box4").classList.contains("bg-danger"),
+            //     document.getElementById("box5").classList.contains("bg-danger"),
+            //     document.getElementById("box6").classList.contains("bg-danger"),
+            //     document.getElementById("box7").classList.contains("bg-danger"),
+            //     document.getElementById("box8").classList.contains("bg-danger"),
+            //     document.getElementById("box9").classList.contains("bg-danger")
+            // ]
+            // let blueBoxes=[
+
+            //  document.getElementById("box1").classList.contains("bg-primary"),
+            //  document.getElementById("box2").classList.contains("bg-primary"),
+            //  document.getElementById("box3").classList.contains("bg-primary"),
+            //  document.getElementById("box4").classList.contains("bg-primary"),
+            //  document.getElementById("box5").classList.contains("bg-primary"),
+            //  document.getElementById("box6").classList.contains("bg-primary"),
+            //  document.getElementById("box7").classList.contains("bg-primary"),
+            //  document.getElementById("box8").classList.contains("bg-primary"),
+            //  document.getElementById("box9").classList.contains("bg-primary")]
+            // if (box1 && box2 && box3) {
+            //     console.log("winner");
+            // } else if (box4 && box5 && box6) {
+            //     console.log("winner");
+            // } else if (box7 && box8 && box9) {
+            //     console.log("winner");
+            // }
+            // else if (box1 && box4 && box7) {
+            //     console.log("winner");
+            // }
+            // else if (box2 && box5 && box8) {
+            //     console.log("winner");
+            // }
+            // else if (box3 && box6 && box9) {
+            //     console.log("winner");
+            // }
+            // else if (box1 && box5 && box9) {
+            //     console.log("winner");
+            // }
+            // else if (box3 && box5 && box7) {
+            //     console.log("winner");
+            // }
+            // else if (box3hasclass && box5hasclass && box7hasclass) {
+            //     console.log("winner");
+            // }
+
+        
+            // chance ? document.getElementById(id).classList.add("bg-danger")
+            //     : document.getElementById(id).classList.add("bg-primary")
+            // chance = !chance
+            // document.querySelector(`#${id}`).classList.add("bg-danger")
+            // document.querySelector("#" + id).classList.add("bg-danger")
+            // console.log("clicked", id);
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
